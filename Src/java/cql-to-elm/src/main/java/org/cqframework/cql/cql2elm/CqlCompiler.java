@@ -119,8 +119,8 @@ public class CqlCompiler {
 
     private class CqlErrorListener extends BaseErrorListener {
 
-        private LibraryBuilder builder;
-        private boolean detailedErrors;
+        private final LibraryBuilder builder;
+        private final boolean detailedErrors;
 
         public CqlErrorListener(LibraryBuilder builder, boolean detailedErrors) {
             this.builder = builder;

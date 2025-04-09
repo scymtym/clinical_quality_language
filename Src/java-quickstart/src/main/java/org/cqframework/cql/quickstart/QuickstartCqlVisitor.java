@@ -19,18 +19,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public class QuickstartCqlVisitor extends cqlBaseVisitor {
+public class QuickstartCqlVisitor extends cqlBaseVisitor<Object> {
     private String library;
     private String version;
-    private HashSet<String> variables;
-    private HashMap<String, ValueSet> valuesets;
-    private HashSet<Retrieve> retrieves;
+    private final HashSet<String> variables;
+    private final HashMap<String, ValueSet> valueSets;
+    private final HashSet<Retrieve> retrieves;
 
     public QuickstartCqlVisitor() {
         library = null;
         version = null;
         variables = new HashSet<>();
-        valuesets = new HashMap<>();
+        valueSets = new HashMap<>();
         retrieves = new HashSet<>();
     }
 
@@ -46,8 +46,8 @@ public class QuickstartCqlVisitor extends cqlBaseVisitor {
         return Collections.unmodifiableSet(variables);
     }
 
-    public Map<String, ValueSet> getValuesets() {
-        return Collections.unmodifiableMap(valuesets);
+    public Map<String, ValueSet> getValueSets() {
+        return Collections.unmodifiableMap(valueSets);
     }
 
     public Collection<Retrieve> getRetrieves() {
@@ -75,7 +75,7 @@ public class QuickstartCqlVisitor extends cqlBaseVisitor {
         String valuesetHandle = unquote(ctx.VALUESET());
         // TODO: support valuesetPathIdentifier
 
-        ValueSet vs = valuesets.get(valuesetHandle);
+        ValueSet vs = valueSets.get(valuesetHandle);
         if (vs == null) {
             throw new IllegalArgumentException("Reference to undefined valueset: " + valuesetHandle);
         }
@@ -88,7 +88,7 @@ public class QuickstartCqlVisitor extends cqlBaseVisitor {
         String handle = unquote(ctx.VALUESET());
         ValueSet valueset = (ValueSet) visit(ctx.expression());
 
-        valuesets.put(handle, valueset);
+        valueSets.put(handle, valueset);
 
         return valueset;
     }
@@ -171,7 +171,7 @@ public class QuickstartCqlVisitor extends cqlBaseVisitor {
             System.out.println("  " + v);
         }
         System.out.println("\nDefined ValueSets:");
-        for (Map.Entry e : visitor.getValuesets().entrySet()) {
+        for (Map.Entry e : visitor.getValueSets().entrySet()) {
             System.out.println("  " + e.getKey() + " --> " + e.getValue());
         }
         System.out.println("\nDefined Retrieves:");

@@ -1,4 +1,4 @@
-library CMS135_QDM
+library CMS135_QDM version '1.0'
 
 using QDM version '5.0.2'
 

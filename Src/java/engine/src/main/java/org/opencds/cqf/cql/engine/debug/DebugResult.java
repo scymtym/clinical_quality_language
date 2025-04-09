@@ -42,7 +42,7 @@ public class DebugResult {
         }
     }
 
-    public void logDebugError(CqlException exception) {
+    public void logDebugError(final CqlException exception) {
         messages.add(exception);
     }
 

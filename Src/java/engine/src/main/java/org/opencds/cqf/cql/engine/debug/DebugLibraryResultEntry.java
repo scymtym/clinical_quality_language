@@ -7,7 +7,7 @@ import java.util.Map;
 import org.hl7.elm.r1.Element;
 
 public class DebugLibraryResultEntry {
-    private String libraryName;
+    private final String libraryName;
 
     public String getLibraryName() {
         return this.libraryName;
@@ -15,10 +15,10 @@ public class DebugLibraryResultEntry {
 
     public DebugLibraryResultEntry(String libraryName) {
         this.libraryName = libraryName;
-        this.results = new HashMap<DebugLocator, List<DebugResultEntry>>();
+        this.results = new HashMap<>();
     }
 
-    private Map<DebugLocator, List<DebugResultEntry>> results;
+    private final Map<DebugLocator, List<DebugResultEntry>> results;
 
     public Map<DebugLocator, List<DebugResultEntry>> getResults() {
         return results;
@@ -26,7 +26,7 @@ public class DebugLibraryResultEntry {
 
     private void logDebugResult(DebugLocator locator, Object result) {
         if (!results.containsKey(locator)) {
-            results.put(locator, new ArrayList<DebugResultEntry>());
+            results.put(locator, new ArrayList<>());
         }
         List<DebugResultEntry> debugResults = results.get(locator);
         debugResults.add(new DebugResultEntry(result));

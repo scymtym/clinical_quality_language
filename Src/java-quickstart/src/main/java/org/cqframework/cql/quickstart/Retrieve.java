@@ -1,7 +1,7 @@
 package org.cqframework.cql.quickstart;
 
 public class Retrieve {
-    public static enum Existence {Occurrence, NonOccurrence, UnknownOccurrence}
+    public enum Existence {Occurrence, NonOccurrence, UnknownOccurrence}
 
     private final Existence existence;
     private final String topic;

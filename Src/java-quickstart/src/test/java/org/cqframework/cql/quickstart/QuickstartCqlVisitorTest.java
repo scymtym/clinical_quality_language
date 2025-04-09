@@ -38,7 +38,7 @@ public class QuickstartCqlVisitorTest {
                 "valueset \"Acute Pharyngitis\" = ValueSet('2.16.840.1.113883.3.464.1003.102.12.1011')\n" +
                 "valueset \"Acute Tonsillitis\" = ValueSet('2.16.840.1.113883.3.464.1003.102.12.1012')");
 
-        Map<String, ValueSet> vsMap = v.getValuesets();
+        Map<String, ValueSet> vsMap = v.getValueSets();
         assertEquals(vsMap.size(), 2);
 
         ValueSet vs = vsMap.get("Acute Pharyngitis");
@@ -120,7 +120,7 @@ public class QuickstartCqlVisitorTest {
         assertEquals(v.getLibrary(), "CMS153_CQM");
         assertEquals(v.getVersion(), "2");
         assertEquals(v.getVariables().size(), 6);
-        assertEquals(v.getValuesets().size(), 14);
+        assertEquals(v.getValueSets().size(), 14);
         assertEquals(v.getRetrieves().size(), 13);
     }
 
