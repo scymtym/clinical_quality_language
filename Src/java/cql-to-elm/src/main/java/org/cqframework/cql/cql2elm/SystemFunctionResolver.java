@@ -9,6 +9,7 @@ import org.cqframework.cql.cql2elm.model.SystemModel;
 import org.cqframework.cql.cql2elm.model.invocation.*;
 import org.cqframework.cql.elm.IdObjectFactory;
 import org.hl7.elm.r1.*;
+import org.hl7.elm_modelinfo.r1.ContextInfo;
 
 public class SystemFunctionResolver {
     private final IdObjectFactory of;
@@ -412,8 +413,24 @@ public class SystemFunctionResolver {
 
     private Expression getPatientBirthDateProperty() {
         Expression source = builder.resolveIdentifier("Patient", true);
-        String birthDateProperty = builder.getDefaultModel().getModelInfo().getPatientBirthDatePropertyName();
+        final var modelInfo = builder.getDefaultModel().getModelInfo();
+        builder.currentExpressionContext();
+
+        String birthDateProperty = modelInfo.getPatientBirthDatePropertyName();
         // If the property has a qualifier, resolve it as a path (without model mapping)
+        if (birthDateProperty == null) {
+            final var maybeBirthDateElement = modelInfo.getContextInfo().stream()
+                    .filter(contextInfo -> contextInfo.getName().equals(builder.currentExpressionContext()))
+                    .findFirst()
+                    .map(ContextInfo::getBirthDateElement);
+            if (maybeBirthDateElement.isPresent()) {
+                birthDateProperty = maybeBirthDateElement.get();
+            }
+        }
+        if (birthDateProperty == null) {
+            throw new IllegalArgumentException("Could not find birth date property");
+        }
+
         if (birthDateProperty.indexOf('.') >= 1) {
             Property property = of.createProperty().withSource(source).withPath(birthDateProperty);
             property.setResultType(builder.resolvePath(source.getResultType(), property.getPath()));
