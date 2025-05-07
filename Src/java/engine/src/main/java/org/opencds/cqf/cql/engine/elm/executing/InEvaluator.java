@@ -108,26 +108,39 @@ public class InEvaluator {
     }
 
     private static Boolean listIn(Object left, Iterable<?> right, State state) {
-        Boolean isEqual;
+        if (left == null) {
+            for (Object element : right) {
+               if (element == null) {
+                   return true;
+               }
+            }
+            return false;
+        }
+        // Quick check: is left itself a member of right?
         for (Object element : right) {
-            // Nulls are considered equivalent in lists
-            // Other elements use equality semantics
-            if (element == null && left == null) {
-                return true;
-            }
-
-            if (state.getEngineOptions().contains(CqlEngine.Options.EnableHedisCompatibilityMode)) {
-                isEqual = EquivalentEvaluator.equivalent(left, element, state);
-
-            } else {
-                isEqual = EqualEvaluator.equal(left, element, state);
-            }
-
-            if (Boolean.TRUE.equals(isEqual)) {
+            if (left == element) {
                 return true;
             }
         }
-
+        if (state.getEngineOptions().contains(CqlEngine.Options.EnableHedisCompatibilityMode)) {
+            for (Object element : right) {
+                // Nulls are considered equivalent in lists
+                // Other elements use equality semantics
+                if (element != null
+                    && Boolean.TRUE.equals(EquivalentEvaluator.equivalent(left, element, state))) {
+                    return true;
+                }
+            }
+        } else {
+            for (Object element : right) {
+                // Nulls are considered equivalent in lists
+                // Other elements use equality semantics
+                if (element != null
+                    && Boolean.TRUE.equals(EqualEvaluator.equal(left, element, state))) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
