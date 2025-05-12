@@ -355,7 +355,7 @@ public class State {
     public void setContextValue(String context, Object contextValue) {
         if (!contextValues.containsKey(context) || !contextValues.get(context).equals(contextValue)) {
             contextValues.put(context, contextValue);
-            cache.getExpressions().clear();
+            //cache.getExpressions().clear();
         }
     }
 
