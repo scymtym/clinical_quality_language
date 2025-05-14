@@ -25,13 +25,18 @@ public class EvaluationVisitor extends BaseElmLibraryVisitor<Object, State> {
             throw e;
         } catch (Exception e) {
             final var exception = new CqlException(
-                    e.getMessage(), e, SourceLocator.fromNode(expression, state.getCurrentLibrary()), Severity.ERROR);
+                    e.getMessage(),
+                    e,
+                    SourceLocator.fromNode(expression, state.getCurrentLibrary()),
+                    Severity.ERROR);
             maybeExtendBacktrace(exception, state, expression);
             throw exception;
         }
     }
 
-    private void maybeExtendBacktrace(final CqlException exception, final State state, final Expression expression) {
+    private void maybeExtendBacktrace(final CqlException exception,
+                                      final State state,
+                                      final Expression expression) {
         // If the top of the stack in state is call-like
         // ActivationFrame (that is an ActivationFrame for an
         // expression definition or a function definition), try to
@@ -39,7 +44,12 @@ public class EvaluationVisitor extends BaseElmLibraryVisitor<Object, State> {
         // call.
         final var frame = state.getTopActivationFrame();
         if (frame.element instanceof ExpressionDef) {
-            exception.getBacktrace().maybeAddFrame((ExpressionDef) frame.element, frame, state.getStack(), expression);
+            exception.getBacktrace().maybeAddFrame((ExpressionDef) frame.element,
+                    frame,
+                    state.getStack(),
+                    state.getCurrentContext(),
+                    state.getCurrentContextValue(),
+                    expression);
         }
     }
 
