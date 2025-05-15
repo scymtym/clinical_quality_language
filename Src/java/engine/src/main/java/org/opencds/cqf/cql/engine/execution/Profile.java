@@ -173,6 +173,15 @@ public class Profile {
 
     public Profile() {}
 
+    /**
+     * Total execution time of evaluations contained in this profile.
+     *
+     * @return Total execution time in nanoseconds.
+     */
+    public long getDuration() {
+        return tree.time;
+    }
+
     public void enter(final State.ActivationFrame frame) {
         final var topNode = this.stack.peek();
         final Node newNode;
